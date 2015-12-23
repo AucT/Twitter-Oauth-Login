@@ -20,11 +20,11 @@ if (isset($_SESSION['oauth_token'])) {
 
     $connection = new Abraham\TwitterOAuth\TwitterOAuth($consumer_key, $consumer_secret);
     //necessary to get access token other wise u will not have permision to get user info
-    $params = array("oauth_verifier" => $_GET['oauth_verifier'], "oauth_token" => $_GET['oauth_token']);
-    $access_token = $connection->oauth("oauth/access_token", $params);
+    $params = array("oauth_verifier" => $_GET['oauth_verifier'], 'oauth_token' => $_GET['oauth_token']);
+    $access_token = $connection->oauth('oauth/access_token', $params);
     //now again create new instance using updated return oauth_token and oauth_token_secret because old one expired if u dont u this u will also get token expired error
     $connection = new Abraham\TwitterOAuth\TwitterOAuth($consumer_key, $consumer_secret, $access_token['oauth_token'], $access_token['oauth_token_secret']);
-    $content = $connection->get("account/verify_credentials");
+    $content = $connection->get('account/verify_credentials');
     //Printing the profile data
     print_r($content);
 } else {
@@ -33,7 +33,7 @@ if (isset($_SESSION['oauth_token'])) {
     $temporary_credentials = $connection->oauth('oauth/request_token', array("oauth_callback" => $callback));
     $_SESSION['oauth_token'] = $temporary_credentials['oauth_token'];
     $_SESSION['oauth_token_secret'] = $temporary_credentials['oauth_token_secret'];
-    $url = $connection->url("oauth/authorize", array("oauth_token" => $temporary_credentials['oauth_token']));
+    $url = $connection->url('oauth/authenticate', array('oauth_token' => $temporary_credentials['oauth_token']));
     // REDIRECTING TO THE URL
     header('Location: ' . $url);
 }
